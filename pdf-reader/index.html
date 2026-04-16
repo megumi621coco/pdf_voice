@@ -29,12 +29,9 @@
       padding: 16px 16px 32px;
     }
 
-    header {
-      text-align: center;
-      padding: 12px 0 20px;
-    }
+    header { text-align: center; padding: 12px 0 20px; }
     header h1 { font-size: 20px; color: var(--accent-light); letter-spacing: 0.03em; }
-    header p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    header p  { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 
     /* ========== UPLOAD SCREEN ========== */
     #upload-screen {
@@ -43,7 +40,7 @@
       align-items: center;
       justify-content: center;
       min-height: 72vh;
-      gap: 20px;
+      gap: 16px;
     }
 
     .upload-card {
@@ -60,96 +57,75 @@
       background: rgba(124, 111, 255, 0.08);
       border-color: var(--accent-light);
     }
-    .upload-card .icon { font-size: 56px; margin-bottom: 16px; }
+    .upload-card .icon  { font-size: 56px; margin-bottom: 16px; }
     .upload-card .label { font-size: 18px; margin-bottom: 8px; }
-    .upload-card .sub { font-size: 13px; color: var(--text-muted); }
+    .upload-card .sub   { font-size: 13px; color: var(--text-muted); }
 
     #file-input { display: none; }
 
-    /* ========== PLAYER SCREEN ========== */
-    #player-screen {
+    /* 続きから再生バナー */
+    #resume-banner {
       display: none;
-      flex-direction: column;
-      gap: 14px;
+      width: 100%;
+      background: rgba(124, 111, 255, 0.15);
+      border: 1px solid var(--accent);
+      border-radius: 14px;
+      padding: 14px 16px;
+      text-align: center;
     }
+    #resume-banner p   { font-size: 14px; margin-bottom: 10px; color: var(--text); }
+    #resume-banner small { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 10px; }
+    .resume-btns { display: flex; gap: 8px; justify-content: center; }
+    .btn-resume {
+      padding: 8px 20px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn-resume.primary   { background: var(--accent); color: white; }
+    .btn-resume.secondary { background: #2a2a4a; color: var(--text-muted); border: 1px solid #444; }
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    /* ========== PLAYER SCREEN ========== */
+    #player-screen { display: none; flex-direction: column; gap: 14px; }
+
+    .top-bar { display: flex; justify-content: space-between; align-items: center; }
     .filename {
-      font-size: 13px;
-      color: var(--text-muted);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      max-width: 70%;
+      font-size: 13px; color: var(--text-muted);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70%;
     }
     .btn-text {
-      background: none;
-      border: 1px solid #444;
-      border-radius: 8px;
-      color: var(--text-muted);
-      padding: 5px 12px;
-      font-size: 13px;
-      cursor: pointer;
+      background: none; border: 1px solid #444; border-radius: 8px;
+      color: var(--text-muted); padding: 5px 12px; font-size: 13px; cursor: pointer;
     }
-    .btn-text:active { background: rgba(255,255,255,0.05); }
 
-    /* TTS mode badge */
     .tts-badge {
-      text-align: center;
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 12px;
-      display: inline-block;
+      text-align: center; font-size: 11px; padding: 3px 10px;
+      border-radius: 12px; display: inline-block;
     }
     .tts-badge.voicevox { background: rgba(124,111,255,0.2); color: var(--accent-light); }
-    .tts-badge.webspeech { background: rgba(100,200,100,0.15); color: #88cc88; }
     .tts-badge.fallback { background: rgba(255,180,0,0.15); color: #ffcc44; }
+    .tts-badge-row { text-align: center; }
 
-    /* Progress */
-    .progress-wrap { position: relative; }
     .progress-bar {
-      width: 100%;
-      height: 5px;
-      background: #2a2a4a;
-      border-radius: 3px;
-      overflow: hidden;
+      width: 100%; height: 5px; background: #2a2a4a; border-radius: 3px; overflow: hidden;
     }
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--accent), var(--accent-light));
-      border-radius: 3px;
-      transition: width 0.4s;
+      border-radius: 3px; transition: width 0.4s;
     }
-    .progress-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      text-align: right;
-    }
+    .progress-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: right; }
 
-    /* Text display */
     .text-display {
-      background: var(--surface);
-      border-radius: 16px;
-      padding: 16px;
-      height: 38vh;
-      overflow-y: auto;
-      scroll-behavior: smooth;
+      background: var(--surface); border-radius: 16px;
+      padding: 16px; height: 38vh; overflow-y: auto; scroll-behavior: smooth;
     }
 
     .para-item {
-      padding: 9px 12px;
-      border-radius: 10px;
-      margin-bottom: 6px;
-      cursor: pointer;
-      color: var(--text-muted);
-      font-size: 15px;
-      line-height: 1.75;
-      transition: background 0.15s, color 0.15s;
+      padding: 9px 12px; border-radius: 10px; margin-bottom: 6px;
+      cursor: pointer; color: var(--text-muted); font-size: 15px;
+      line-height: 1.75; transition: background 0.15s, color 0.15s;
       border-left: 3px solid transparent;
     }
     .para-item:hover { background: rgba(255,255,255,0.04); }
@@ -160,153 +136,81 @@
     }
     .para-item.done { color: #555577; }
 
-    /* Controls card */
     .controls-card {
-      background: var(--surface);
-      border-radius: 16px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
+      background: var(--surface); border-radius: 16px;
+      padding: 20px; display: flex; flex-direction: column; gap: 18px;
     }
 
-    /* Main buttons */
-    .main-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-    }
+    .main-controls { display: flex; justify-content: center; align-items: center; gap: 20px; }
 
     .btn-circle {
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      flex-shrink: 0;
+      border: none; background: none; cursor: pointer; color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; flex-shrink: 0;
       transition: transform 0.1s, background 0.15s;
     }
     .btn-circle:active { transform: scale(0.88); }
 
-    .btn-sm  { width: 48px; height: 48px; font-size: 22px; }
-    .btn-play {
-      width: 72px; height: 72px; font-size: 30px;
-      background: var(--accent);
-    }
+    .btn-sm   { width: 48px; height: 48px; font-size: 22px; }
+    .btn-play { width: 72px; height: 72px; font-size: 30px; background: var(--accent); }
     .btn-play:hover { background: var(--accent-light); }
     .btn-skip { background: rgba(124,111,255,0.12); }
     .btn-skip:hover { background: rgba(124,111,255,0.25); }
 
-    /* Speed row */
-    .speed-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .speed-row { display: flex; align-items: center; gap: 12px; }
     .speed-row label { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
     .speed-val { font-size: 16px; font-weight: bold; color: var(--accent-light); min-width: 38px; text-align: right; }
 
     input[type="range"] {
-      flex: 1;
-      -webkit-appearance: none;
-      height: 4px;
-      background: #2a2a4a;
-      border-radius: 2px;
-      outline: none;
+      flex: 1; -webkit-appearance: none;
+      height: 4px; background: #2a2a4a; border-radius: 2px; outline: none;
     }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       width: 22px; height: 22px;
-      background: var(--accent);
-      border-radius: 50%;
-      cursor: pointer;
+      background: var(--accent); border-radius: 50%; cursor: pointer;
       box-shadow: 0 0 0 3px rgba(124,111,255,0.2);
     }
 
-    /* Voice row */
-    .voice-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .voice-row { display: flex; align-items: center; gap: 10px; }
     .voice-row label { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
     select.voice-select {
-      flex: 1;
-      background: #2a2a4a;
-      border: 1px solid #444;
-      border-radius: 8px;
-      color: var(--text);
-      padding: 8px 10px;
-      font-size: 14px;
+      flex: 1; background: #2a2a4a; border: 1px solid #444;
+      border-radius: 8px; color: var(--text); padding: 8px 10px; font-size: 14px;
     }
 
-    /* Page controls */
-    .page-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
+    .page-row { display: flex; align-items: center; justify-content: center; gap: 12px; }
     .btn-page {
-      background: #2a2a4a;
-      border: 1px solid #444;
-      border-radius: 10px;
-      color: var(--text);
-      padding: 10px 18px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.15s;
+      background: #2a2a4a; border: 1px solid #444; border-radius: 10px;
+      color: var(--text); padding: 10px 18px; font-size: 14px; cursor: pointer;
     }
     .btn-page:active { background: rgba(124,111,255,0.25); }
     .page-info { font-size: 14px; color: var(--text-muted); min-width: 80px; text-align: center; }
 
     /* ========== OVERLAYS ========== */
     #loading-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 15, 35, 0.92);
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      gap: 16px;
-      z-index: 300;
+      display: none; position: fixed; inset: 0;
+      background: rgba(15,15,35,0.92);
+      justify-content: center; align-items: center;
+      flex-direction: column; gap: 16px; z-index: 300;
     }
     #loading-overlay.show { display: flex; }
     .spinner {
       width: 42px; height: 42px;
-      border: 3px solid #333;
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.75s linear infinite;
+      border: 3px solid #333; border-top-color: var(--accent);
+      border-radius: 50%; animation: spin 0.75s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     #loading-text { font-size: 15px; color: var(--text-muted); }
 
     .toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #2a2a4a;
-      border: 1px solid #444;
-      color: var(--text);
-      padding: 10px 22px;
-      border-radius: 24px;
-      font-size: 14px;
-      opacity: 0;
-      transition: opacity 0.3s;
-      z-index: 400;
-      white-space: nowrap;
-      pointer-events: none;
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      background: #2a2a4a; border: 1px solid #444; color: var(--text);
+      padding: 10px 22px; border-radius: 24px; font-size: 14px;
+      opacity: 0; transition: opacity 0.3s; z-index: 400;
+      white-space: nowrap; pointer-events: none;
     }
     .toast.show { opacity: 1; }
-
-    .tts-badge-row { text-align: center; }
   </style>
 </head>
 <body>
@@ -324,6 +228,16 @@
     <div class="sub">またはここにドラッグ＆ドロップ</div>
   </div>
   <input type="file" id="file-input" accept=".pdf">
+
+  <!-- 続きから再生バナー -->
+  <div id="resume-banner">
+    <p id="resume-title"></p>
+    <small id="resume-info"></small>
+    <div class="resume-btns">
+      <button class="btn-resume primary"   id="resume-yes">続きから再生</button>
+      <button class="btn-resume secondary" id="resume-no">最初から</button>
+    </div>
+  </div>
 </div>
 
 <!-- Player screen -->
@@ -345,21 +259,18 @@
   <div class="text-display" id="text-display"></div>
 
   <div class="controls-card">
-    <!-- Main playback -->
     <div class="main-controls">
-      <button class="btn-circle btn-sm btn-skip" id="prev-btn" title="前の段落">⏮</button>
+      <button class="btn-circle btn-sm btn-skip" id="prev-btn">⏮</button>
       <button class="btn-circle btn-play" id="play-btn">▶</button>
-      <button class="btn-circle btn-sm btn-skip" id="next-btn" title="次の段落">⏭</button>
+      <button class="btn-circle btn-sm btn-skip" id="next-btn">⏭</button>
     </div>
 
-    <!-- Speed -->
     <div class="speed-row">
       <label>速度</label>
       <input type="range" id="speed-slider" min="5" max="25" value="10" step="1">
       <span class="speed-val" id="speed-val">1.0x</span>
     </div>
 
-    <!-- Voice -->
     <div class="voice-row">
       <label>声</label>
       <select class="voice-select" id="voice-select">
@@ -371,7 +282,6 @@
       </select>
     </div>
 
-    <!-- Page navigation -->
     <div class="page-row">
       <button class="btn-page" id="prev-page-btn">◀ 前ページ</button>
       <span class="page-info" id="page-info">-</span>
@@ -380,16 +290,11 @@
   </div>
 </div>
 
-<!-- Loading overlay -->
 <div id="loading-overlay">
   <div class="spinner"></div>
   <div id="loading-text">読み込み中...</div>
 </div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
-
-<!-- Hidden audio element for background-safe playback -->
 <audio id="audio-el" preload="auto"></audio>
 
 <script>
@@ -397,40 +302,95 @@
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
   /* ===================== STATE ===================== */
-  let paragraphs   = [];   // [{text, pageNum}]
-  let currentIdx   = 0;
-  let isPlaying    = false;
-  let currentRate  = 1.0;
-  let speakerId    = 3;
-  let totalPages   = 0;
-  let ttsMode      = 'voicevox'; // 'voicevox' | 'webspeech'
-  let prefetch     = null;       // {index, blob}
-  let blobUrl      = null;
+  let paragraphs  = [];
+  let currentIdx  = 0;
+  let isPlaying   = false;
+  let currentRate = 1.0;
+  let speakerId   = 3;          // VOICEVOX speaker ID
+  let totalPages  = 0;
+  let ttsMode     = 'voicevox'; // 'voicevox' | 'webspeech'
+  let prefetch    = null;
+  let blobUrl     = null;
+  let wsVoices    = [];         // Web Speech API の日本語音声リスト
+  let wsVoiceIdx  = 0;          // 選択中の wsVoices インデックス
+
+  const LS_KEY = 'pdf-reader-progress';
 
   /* ===================== DOM ===================== */
-  const uploadScreen  = document.getElementById('upload-screen');
-  const playerScreen  = document.getElementById('player-screen');
-  const uploadCard    = document.getElementById('upload-card');
-  const fileInput     = document.getElementById('file-input');
-  const filenameEl    = document.getElementById('filename');
-  const newFileBtn    = document.getElementById('new-file-btn');
-  const ttsBadge      = document.getElementById('tts-badge');
-  const progressFill  = document.getElementById('progress-fill');
-  const progressLabel = document.getElementById('progress-label');
-  const textDisplay   = document.getElementById('text-display');
-  const playBtn       = document.getElementById('play-btn');
-  const prevBtn       = document.getElementById('prev-btn');
-  const nextBtn       = document.getElementById('next-btn');
-  const prevPageBtn   = document.getElementById('prev-page-btn');
-  const nextPageBtn   = document.getElementById('next-page-btn');
-  const speedSlider   = document.getElementById('speed-slider');
-  const speedVal      = document.getElementById('speed-val');
-  const voiceSelect   = document.getElementById('voice-select');
-  const pageInfo      = document.getElementById('page-info');
+  const uploadScreen   = document.getElementById('upload-screen');
+  const playerScreen   = document.getElementById('player-screen');
+  const uploadCard     = document.getElementById('upload-card');
+  const fileInput      = document.getElementById('file-input');
+  const filenameEl     = document.getElementById('filename');
+  const newFileBtn     = document.getElementById('new-file-btn');
+  const ttsBadge       = document.getElementById('tts-badge');
+  const progressFill   = document.getElementById('progress-fill');
+  const progressLabel  = document.getElementById('progress-label');
+  const textDisplay    = document.getElementById('text-display');
+  const playBtn        = document.getElementById('play-btn');
+  const prevBtn        = document.getElementById('prev-btn');
+  const nextBtn        = document.getElementById('next-btn');
+  const prevPageBtn    = document.getElementById('prev-page-btn');
+  const nextPageBtn    = document.getElementById('next-page-btn');
+  const speedSlider    = document.getElementById('speed-slider');
+  const speedVal       = document.getElementById('speed-val');
+  const voiceSelect    = document.getElementById('voice-select');
+  const pageInfo       = document.getElementById('page-info');
   const loadingOverlay = document.getElementById('loading-overlay');
-  const loadingText   = document.getElementById('loading-text');
-  const toastEl       = document.getElementById('toast');
-  const audioEl       = document.getElementById('audio-el');
+  const loadingText    = document.getElementById('loading-text');
+  const toastEl        = document.getElementById('toast');
+  const audioEl        = document.getElementById('audio-el');
+  const resumeBanner   = document.getElementById('resume-banner');
+  const resumeTitle    = document.getElementById('resume-title');
+  const resumeInfo     = document.getElementById('resume-info');
+  const resumeYes      = document.getElementById('resume-yes');
+  const resumeNo       = document.getElementById('resume-no');
+
+  /* ===================== PROGRESS (localStorage) ===================== */
+  function saveProgress() {
+    if (!paragraphs.length) return;
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      filename:        filenameEl.textContent,
+      currentIdx,
+      totalParagraphs: paragraphs.length,
+      pageNum:         paragraphs[currentIdx].pageNum,
+      savedAt:         Date.now(),
+    }));
+  }
+
+  function getSavedProgress() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY)); }
+    catch { return null; }
+  }
+
+  function clearProgress() { localStorage.removeItem(LS_KEY); }
+
+  /* ===================== RESUME BANNER ===================== */
+  // ページ読み込み時に前回の保存状態を確認
+  window.addEventListener('load', () => {
+    const saved = getSavedProgress();
+    if (!saved) return;
+    const age = (Date.now() - saved.savedAt) / 1000 / 60 / 60; // 時間
+    if (age > 24 * 30) { clearProgress(); return; } // 30日超は削除
+
+    resumeTitle.textContent = `📂 前回: ${saved.filename}`;
+    resumeInfo.textContent  =
+      `${saved.pageNum}ページ目・${saved.currentIdx + 1} / ${saved.totalParagraphs} 段落`;
+    resumeBanner.style.display = 'block';
+  });
+
+  resumeYes.addEventListener('click', () => {
+    resumeBanner.style.display = 'none';
+    fileInput.click(); // ユーザーに同じPDFを選んでもらう（resumeフラグを立てる）
+    pendingResume = true;
+  });
+
+  resumeNo.addEventListener('click', () => {
+    clearProgress();
+    resumeBanner.style.display = 'none';
+  });
+
+  let pendingResume = false;
 
   /* ===================== FILE UPLOAD ===================== */
   uploadCard.addEventListener('click', () => fileInput.click());
@@ -438,13 +398,11 @@
     if (e.target.files[0]) loadPDF(e.target.files[0]);
   });
   uploadCard.addEventListener('dragover', e => {
-    e.preventDefault();
-    uploadCard.classList.add('drag-over');
+    e.preventDefault(); uploadCard.classList.add('drag-over');
   });
   uploadCard.addEventListener('dragleave', () => uploadCard.classList.remove('drag-over'));
   uploadCard.addEventListener('drop', e => {
-    e.preventDefault();
-    uploadCard.classList.remove('drag-over');
+    e.preventDefault(); uploadCard.classList.remove('drag-over');
     const f = e.dataTransfer.files[0];
     if (f && f.name.endsWith('.pdf')) loadPDF(f);
   });
@@ -454,6 +412,13 @@
     uploadScreen.style.display = 'flex';
     fileInput.value = '';
     paragraphs = [];
+    const saved = getSavedProgress();
+    if (saved) {
+      resumeTitle.textContent = `📂 前回: ${saved.filename}`;
+      resumeInfo.textContent  =
+        `${saved.pageNum}ページ目・${saved.currentIdx + 1} / ${saved.totalParagraphs} 段落`;
+      resumeBanner.style.display = 'block';
+    }
   });
 
   /* ===================== LOAD PDF ===================== */
@@ -469,10 +434,8 @@
         loadingText.textContent = `テキストを抽出中... ${p} / ${totalPages} ページ`;
         const page    = await pdf.getPage(p);
         const content = await page.getTextContent();
-        const text    = buildText(content);
-        paragraphs.push(...chunk(text, p));
+        paragraphs.push(...chunk(buildText(content), p));
       }
-
       paragraphs = paragraphs.filter(p => p.text.trim().length > 3);
 
       if (paragraphs.length === 0) {
@@ -481,21 +444,29 @@
         return;
       }
 
+      // 続きから再生の復元
       currentIdx = 0;
+      if (pendingResume) {
+        pendingResume = false;
+        const saved = getSavedProgress();
+        if (saved && saved.filename === file.name && saved.currentIdx < paragraphs.length) {
+          currentIdx = saved.currentIdx;
+          showToast(`${saved.pageNum}ページ目から再開します`);
+        }
+      }
+
       filenameEl.textContent = file.name;
+      resumeBanner.style.display = 'none';
       hideLoading();
       uploadScreen.style.display = 'none';
       playerScreen.style.display = 'flex';
       playerScreen.style.flexDirection = 'column';
 
-      renderList();
-      updateProgress();
-      updatePageInfo();
+      renderList(); updateProgress(); updatePageInfo();
       showToast(`${paragraphs.length} 段落を読み込みました`);
     } catch (err) {
       hideLoading();
       showToast('読み込みエラー: ' + err.message);
-      console.error(err);
     }
   }
 
@@ -508,31 +479,24 @@
     });
     let out = '', lastY = sorted[0].transform[5];
     for (const it of sorted) {
-      const y = it.transform[5];
-      if (Math.abs(y - lastY) > 8) out += '\n';
+      if (Math.abs(it.transform[5] - lastY) > 8) out += '\n';
       out += it.str;
-      lastY = y;
+      lastY = it.transform[5];
     }
     return out;
   }
 
   function chunk(text, pageNum, maxLen = 130) {
-    // Split on Japanese punctuation, then group
     const parts = text
       .split(/\n+/)
       .flatMap(line => line.split(/(?<=[。！？])\s*/))
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
-
+      .map(s => s.trim()).filter(s => s.length > 0);
     const result = [];
     let cur = '';
     for (const s of parts) {
       if (cur.length + s.length > maxLen && cur.length > 0) {
-        result.push({ text: cur, pageNum });
-        cur = s;
-      } else {
-        cur += s;
-      }
+        result.push({ text: cur, pageNum }); cur = s;
+      } else { cur += s; }
     }
     if (cur.trim()) result.push({ text: cur.trim(), pageNum });
     return result;
@@ -543,25 +507,19 @@
     textDisplay.innerHTML = '';
     const from = Math.max(0, currentIdx - 4);
     const to   = Math.min(paragraphs.length - 1, currentIdx + 14);
-
     for (let i = from; i <= to; i++) {
       const div = document.createElement('div');
-      div.className = 'para-item' +
-        (i === currentIdx ? ' active' : '') +
-        (i < currentIdx   ? ' done'   : '');
-      div.textContent   = paragraphs[i].text;
-      div.dataset.index = i;
+      div.className   = 'para-item' + (i === currentIdx ? ' active' : '') + (i < currentIdx ? ' done' : '');
+      div.textContent = paragraphs[i].text;
       div.addEventListener('click', () => jumpTo(i));
       textDisplay.appendChild(div);
     }
-
-    const active = textDisplay.querySelector('.active');
-    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    textDisplay.querySelector('.active')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   function updateProgress() {
     const pct = paragraphs.length ? ((currentIdx + 1) / paragraphs.length * 100) : 0;
-    progressFill.style.width = pct.toFixed(1) + '%';
+    progressFill.style.width  = pct.toFixed(1) + '%';
     progressLabel.textContent = `${currentIdx + 1} / ${paragraphs.length} 段落`;
   }
 
@@ -570,81 +528,84 @@
     pageInfo.textContent = `${paragraphs[currentIdx].pageNum} / ${totalPages} ページ`;
   }
 
+  /* ===================== VOICE SELECT ===================== */
+  // VOICEVOX → Web Speech に切り替わった時、ドロップダウンを実際の音声リストに更新
+  function switchToWebSpeechVoices() {
+    wsVoices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('ja'));
+    if (wsVoices.length === 0) {
+      // voices がまだ読み込まれていない場合は少し待つ
+      speechSynthesis.onvoiceschanged = () => {
+        wsVoices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('ja'));
+        buildWebSpeechOptions();
+      };
+    } else {
+      buildWebSpeechOptions();
+    }
+  }
+
+  function buildWebSpeechOptions() {
+    voiceSelect.innerHTML = '';
+    wsVoices.forEach((v, i) => {
+      const opt = document.createElement('option');
+      opt.value       = i;
+      opt.textContent = v.name.replace('Google ', '').replace('Microsoft ', '');
+      voiceSelect.appendChild(opt);
+    });
+    wsVoiceIdx = 0;
+  }
+
+  voiceSelect.addEventListener('change', () => {
+    if (ttsMode === 'voicevox') {
+      speakerId = parseInt(voiceSelect.value);
+      prefetch  = null;
+    } else {
+      wsVoiceIdx = parseInt(voiceSelect.value);
+    }
+  });
+
   /* ===================== CONTROLS ===================== */
   playBtn.addEventListener('click', () => isPlaying ? pause() : play());
 
   prevBtn.addEventListener('click', () => {
-    if (currentIdx > 0) {
-      stopAll();
-      currentIdx--;
-      renderList(); updateProgress(); updatePageInfo();
-      if (isPlaying) speakCurrent();
-    }
+    if (currentIdx > 0) { stopAll(); currentIdx--; renderList(); updateProgress(); updatePageInfo(); saveProgress(); if (isPlaying) speakCurrent(); }
   });
-
   nextBtn.addEventListener('click', () => {
-    if (currentIdx < paragraphs.length - 1) {
-      stopAll();
-      currentIdx++;
-      renderList(); updateProgress(); updatePageInfo();
-      if (isPlaying) speakCurrent();
-    }
+    if (currentIdx < paragraphs.length - 1) { stopAll(); currentIdx++; renderList(); updateProgress(); updatePageInfo(); saveProgress(); if (isPlaying) speakCurrent(); }
   });
 
   prevPageBtn.addEventListener('click', () => {
     const curPage = paragraphs[currentIdx].pageNum;
-    const idx = [...paragraphs].reverse().findIndex(p => p.pageNum < curPage);
-    if (idx < 0) return;
-    const realIdx = paragraphs.length - 1 - idx;
-    // Find first para of that page
-    const targetPage = paragraphs[realIdx].pageNum;
-    const first = paragraphs.findIndex(p => p.pageNum === targetPage);
+    const prev = [...paragraphs].reverse().find(p => p.pageNum < curPage);
+    if (!prev) return;
+    const first = paragraphs.findIndex(p => p.pageNum === prev.pageNum);
     if (first >= 0) jumpTo(first);
   });
-
   nextPageBtn.addEventListener('click', () => {
-    const curPage = paragraphs[currentIdx].pageNum;
-    const idx = paragraphs.findIndex(p => p.pageNum > curPage);
+    const idx = paragraphs.findIndex(p => p.pageNum > paragraphs[currentIdx].pageNum);
     if (idx >= 0) jumpTo(idx);
   });
 
   function jumpTo(idx) {
-    stopAll();
-    currentIdx = idx;
-    renderList(); updateProgress(); updatePageInfo();
+    stopAll(); currentIdx = idx;
+    renderList(); updateProgress(); updatePageInfo(); saveProgress();
   }
 
   speedSlider.addEventListener('input', () => {
     currentRate = speedSlider.value / 10;
-    speedVal.textContent = currentRate.toFixed(1) + 'x';
-    audioEl.playbackRate = currentRate;
-  });
-
-  voiceSelect.addEventListener('change', () => {
-    speakerId = parseInt(voiceSelect.value);
-    prefetch = null;
+    speedVal.textContent    = currentRate.toFixed(1) + 'x';
+    audioEl.playbackRate    = currentRate;
   });
 
   /* ===================== PLAYBACK ===================== */
-  function play() {
-    isPlaying = true;
-    playBtn.textContent = '⏸';
-    speakCurrent();
-  }
-
+  function play()  { isPlaying = true;  playBtn.textContent = '⏸'; speakCurrent(); }
   function pause() {
-    isPlaying = false;
-    playBtn.textContent = '▶';
-    if (ttsMode === 'voicevox') {
-      audioEl.pause();
-    } else {
-      speechSynthesis.pause();
-    }
+    isPlaying = false; playBtn.textContent = '▶';
+    if (ttsMode === 'voicevox') audioEl.pause();
+    else speechSynthesis.pause();
   }
 
   function stopAll() {
-    audioEl.pause();
-    audioEl.src = '';
+    audioEl.pause(); audioEl.src = '';
     speechSynthesis.cancel();
     if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = null; }
     prefetch = null;
@@ -653,105 +614,90 @@
   async function speakCurrent() {
     if (!isPlaying || currentIdx >= paragraphs.length) {
       if (currentIdx >= paragraphs.length) {
-        isPlaying = false;
-        playBtn.textContent = '▶';
+        isPlaying = false; playBtn.textContent = '▶';
         showToast('読み上げが完了しました ✓');
+        clearProgress();
       }
       return;
     }
-
     const para = paragraphs[currentIdx];
     renderList(); updateProgress(); updatePageInfo();
     updateMediaSession(para.text);
+    saveProgress();
 
-    if (ttsMode === 'voicevox') {
-      await speakVoicevox(para.text);
-    } else {
-      speakWebSpeech(para.text);
-    }
+    ttsMode === 'voicevox' ? await speakVoicevox(para.text) : speakWebSpeech(para.text);
   }
 
   /* --- VOICEVOX --- */
+  // 複数エンドポイントを順番に試す
+  const VOICEVOX_URLS = [
+    (text, id) => `https://api.tts.quest/v3/voicevox/synthesis?text=${encodeURIComponent(text)}&speaker=${id}`,
+    (text, id) => `https://deprecatedapis.tts.quest/v2/voicevox/audio/?speaker=${id}&text=${encodeURIComponent(text)}`,
+  ];
+
+  async function fetchVoicevox(text) {
+    for (const urlFn of VOICEVOX_URLS) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 10000);
+      try {
+        const res = await fetch(urlFn(text, speakerId), { signal: controller.signal });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const blob = await res.blob();
+        clearTimeout(timer);
+        return blob;
+      } catch (e) {
+        clearTimeout(timer);
+        // 次のエンドポイントを試す
+      }
+    }
+    throw new Error('全VOICEVOXエンドポイント失敗');
+  }
+
   async function speakVoicevox(text) {
     try {
       let blob;
       if (prefetch && prefetch.index === currentIdx) {
-        blob = prefetch.blob;
-        prefetch = null;
+        blob = prefetch.blob; prefetch = null;
       } else {
         blob = await fetchVoicevox(text);
       }
-
       if (!isPlaying) return;
 
       if (blobUrl) URL.revokeObjectURL(blobUrl);
       blobUrl = URL.createObjectURL(blob);
       audioEl.src = blobUrl;
       audioEl.playbackRate = currentRate;
-
-      audioEl.onended = () => {
-        if (isPlaying) {
-          currentIdx++;
-          speakCurrent();
-        }
-      };
-      audioEl.onerror = () => {
-        if (isPlaying) { currentIdx++; speakCurrent(); }
-      };
-
+      audioEl.onended = () => { if (isPlaying) { currentIdx++; speakCurrent(); } };
+      audioEl.onerror = () => { if (isPlaying) { currentIdx++; speakCurrent(); } };
       await audioEl.play();
 
-      // Pre-fetch next
-      const nextIdx = currentIdx + 1;
-      if (nextIdx < paragraphs.length) {
-        fetchVoicevox(paragraphs[nextIdx].text)
-          .then(b => { prefetch = { index: nextIdx, blob: b }; })
+      // 先読み
+      const ni = currentIdx + 1;
+      if (ni < paragraphs.length) {
+        fetchVoicevox(paragraphs[ni].text)
+          .then(b => { prefetch = { index: ni, blob: b }; })
           .catch(() => {});
       }
-
     } catch (err) {
-      console.warn('VOICEVOX失敗, Web Speech APIに切り替えます:', err);
+      console.warn('VOICEVOX失敗:', err);
       ttsMode = 'webspeech';
-      ttsBadge.className = 'tts-badge fallback';
+      ttsBadge.className   = 'tts-badge fallback';
       ttsBadge.textContent = '🔈 ブラウザ内蔵音声（バックグラウンド再生不可）';
       showToast('VOICEVOX接続失敗。ブラウザ音声に切り替えました');
+      switchToWebSpeechVoices();
       speakWebSpeech(paragraphs[currentIdx].text);
     }
   }
 
-  async function fetchVoicevox(text) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 8000);
-    try {
-      const res = await fetch(
-        `https://api.tts.quest/v3/voicevox/synthesis?text=${encodeURIComponent(text)}&speaker=${speakerId}`,
-        { signal: controller.signal }
-      );
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return await res.blob();
-    } finally {
-      clearTimeout(timer);
-    }
-  }
-
-  /* --- Web Speech API (fallback) --- */
+  /* --- Web Speech API --- */
   function speakWebSpeech(text) {
     speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.lang  = 'ja-JP';
-    utt.rate  = currentRate;
-
-    // Pick Japanese voice if available
-    const voices = speechSynthesis.getVoices();
-    const jaVoice = voices.find(v => v.lang.startsWith('ja'));
-    if (jaVoice) utt.voice = jaVoice;
-
-    utt.onend = () => {
-      if (isPlaying) { currentIdx++; speakCurrent(); }
-    };
-    utt.onerror = () => {
-      if (isPlaying) { currentIdx++; speakCurrent(); }
-    };
+    const utt  = new SpeechSynthesisUtterance(text);
+    utt.lang   = 'ja-JP';
+    utt.rate   = currentRate;
+    if (wsVoices.length > 0) utt.voice = wsVoices[wsVoiceIdx] || wsVoices[0];
+    utt.onend  = () => { if (isPlaying) { currentIdx++; speakCurrent(); } };
+    utt.onerror = () => { if (isPlaying) { currentIdx++; speakCurrent(); } };
     speechSynthesis.speak(utt);
   }
 
@@ -759,17 +705,15 @@
   function updateMediaSession(text) {
     if (!('mediaSession' in navigator)) return;
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: 'PDF音読中',
-      artist: text.substring(0, 60),
-      album: filenameEl.textContent,
+      title: 'PDF音読中', artist: text.substring(0, 60), album: filenameEl.textContent,
     });
     navigator.mediaSession.setActionHandler('play',  play);
     navigator.mediaSession.setActionHandler('pause', pause);
     navigator.mediaSession.setActionHandler('previoustrack', () => {
-      if (currentIdx > 0) { stopAll(); currentIdx--; renderList(); updateProgress(); updatePageInfo(); if (isPlaying) speakCurrent(); }
+      if (currentIdx > 0) { stopAll(); currentIdx--; renderList(); updateProgress(); updatePageInfo(); saveProgress(); if (isPlaying) speakCurrent(); }
     });
     navigator.mediaSession.setActionHandler('nexttrack', () => {
-      if (currentIdx < paragraphs.length - 1) { stopAll(); currentIdx++; renderList(); updateProgress(); updatePageInfo(); if (isPlaying) speakCurrent(); }
+      if (currentIdx < paragraphs.length - 1) { stopAll(); currentIdx++; renderList(); updateProgress(); updatePageInfo(); saveProgress(); if (isPlaying) speakCurrent(); }
     });
   }
 
@@ -781,9 +725,7 @@
     }
   }
   document.addEventListener('visibilitychange', async () => {
-    if (document.visibilityState === 'visible' && isPlaying && !wakeLock) {
-      await requestWakeLock();
-    }
+    if (document.visibilityState === 'visible' && isPlaying) await requestWakeLock();
   });
   playBtn.addEventListener('click', () => { if (!isPlaying) requestWakeLock(); });
 
@@ -793,8 +735,7 @@
 
   let toastTimer;
   function showToast(msg) {
-    toastEl.textContent = msg;
-    toastEl.classList.add('show');
+    toastEl.textContent = msg; toastEl.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3200);
   }
