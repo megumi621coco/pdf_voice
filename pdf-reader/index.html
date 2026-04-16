@@ -103,8 +103,8 @@
       text-align: center; font-size: 11px; padding: 3px 10px;
       border-radius: 12px; display: inline-block;
     }
-    .tts-badge.voicevox { background: rgba(124,111,255,0.2); color: var(--accent-light); }
-    .tts-badge.fallback { background: rgba(255,180,0,0.15); color: #ffcc44; }
+    .tts-badge.googletts { background: rgba(66,133,244,0.2); color: #7ab4ff; }
+    .tts-badge.fallback  { background: rgba(255,180,0,0.15); color: #ffcc44; }
     .tts-badge-row { text-align: center; }
 
     .progress-bar {
@@ -248,7 +248,7 @@
   </div>
 
   <div class="tts-badge-row">
-    <span class="tts-badge voicevox" id="tts-badge">🎙 VOICEVOX（自然音声）</span>
+    <span class="tts-badge googletts" id="tts-badge">🎙 Google高品質音声</span>
   </div>
 
   <div class="progress-wrap">
@@ -274,11 +274,13 @@
     <div class="voice-row">
       <label>声</label>
       <select class="voice-select" id="voice-select">
-        <option value="3">ずんだもん（女性）</option>
-        <option value="0">四国めたん（女性）</option>
-        <option value="8">春日部つむぎ（女性）</option>
-        <option value="11">玄野武宏（男性）</option>
-        <option value="13">青山龍星（男性）</option>
+        <option value="ja-JP-Neural2-B">Neural2 女性A（自然・高品質）</option>
+        <option value="ja-JP-Neural2-C">Neural2 男性A（自然・高品質）</option>
+        <option value="ja-JP-Neural2-D">Neural2 男性B（自然・高品質）</option>
+        <option value="ja-JP-Wavenet-A">Wavenet 女性A</option>
+        <option value="ja-JP-Wavenet-B">Wavenet 女性B</option>
+        <option value="ja-JP-Wavenet-C">Wavenet 男性A</option>
+        <option value="ja-JP-Wavenet-D">Wavenet 男性B</option>
       </select>
     </div>
 
@@ -306,13 +308,15 @@
   let currentIdx  = 0;
   let isPlaying   = false;
   let currentRate = 1.0;
-  let speakerId   = 3;          // VOICEVOX speaker ID
   let totalPages  = 0;
-  let ttsMode     = 'voicevox'; // 'voicevox' | 'webspeech'
+  let ttsMode     = 'googletts'; // 'googletts' | 'webspeech'
   let prefetch    = null;
   let blobUrl     = null;
-  let wsVoices    = [];         // Web Speech API の日本語音声リスト
-  let wsVoiceIdx  = 0;          // 選択中の wsVoices インデックス
+  let wsVoices    = [];
+  let wsVoiceIdx  = 0;
+
+  const GOOGLE_TTS_KEY  = 'AIzaSyBBzRXePjxWPK_PMIgava_FTtLO7zlVBMo';
+  let googleVoiceName   = 'ja-JP-Neural2-B';
 
   const LS_KEY = 'pdf-reader-progress';
 
@@ -366,12 +370,11 @@
   function clearProgress() { localStorage.removeItem(LS_KEY); }
 
   /* ===================== RESUME BANNER ===================== */
-  // ページ読み込み時に前回の保存状態を確認
   window.addEventListener('load', () => {
     const saved = getSavedProgress();
     if (!saved) return;
-    const age = (Date.now() - saved.savedAt) / 1000 / 60 / 60; // 時間
-    if (age > 24 * 30) { clearProgress(); return; } // 30日超は削除
+    const age = (Date.now() - saved.savedAt) / 1000 / 60 / 60;
+    if (age > 24 * 30) { clearProgress(); return; }
 
     resumeTitle.textContent = `📂 前回: ${saved.filename}`;
     resumeInfo.textContent  =
@@ -381,7 +384,7 @@
 
   resumeYes.addEventListener('click', () => {
     resumeBanner.style.display = 'none';
-    fileInput.click(); // ユーザーに同じPDFを選んでもらう（resumeフラグを立てる）
+    fileInput.click();
     pendingResume = true;
   });
 
@@ -444,7 +447,6 @@
         return;
       }
 
-      // 続きから再生の復元
       currentIdx = 0;
       if (pendingResume) {
         pendingResume = false;
@@ -529,11 +531,18 @@
   }
 
   /* ===================== VOICE SELECT ===================== */
-  // VOICEVOX → Web Speech に切り替わった時、ドロップダウンを実際の音声リストに更新
+  voiceSelect.addEventListener('change', () => {
+    if (ttsMode === 'googletts') {
+      googleVoiceName = voiceSelect.value;
+      prefetch = null;
+    } else {
+      wsVoiceIdx = parseInt(voiceSelect.value);
+    }
+  });
+
   function switchToWebSpeechVoices() {
     wsVoices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('ja'));
     if (wsVoices.length === 0) {
-      // voices がまだ読み込まれていない場合は少し待つ
       speechSynthesis.onvoiceschanged = () => {
         wsVoices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('ja'));
         buildWebSpeechOptions();
@@ -553,15 +562,6 @@
     });
     wsVoiceIdx = 0;
   }
-
-  voiceSelect.addEventListener('change', () => {
-    if (ttsMode === 'voicevox') {
-      speakerId = parseInt(voiceSelect.value);
-      prefetch  = null;
-    } else {
-      wsVoiceIdx = parseInt(voiceSelect.value);
-    }
-  });
 
   /* ===================== CONTROLS ===================== */
   playBtn.addEventListener('click', () => isPlaying ? pause() : play());
@@ -592,16 +592,16 @@
 
   speedSlider.addEventListener('input', () => {
     currentRate = speedSlider.value / 10;
-    speedVal.textContent    = currentRate.toFixed(1) + 'x';
-    audioEl.playbackRate    = currentRate;
+    speedVal.textContent = currentRate.toFixed(1) + 'x';
+    audioEl.playbackRate = currentRate;
   });
 
   /* ===================== PLAYBACK ===================== */
   function play()  { isPlaying = true;  playBtn.textContent = '⏸'; speakCurrent(); }
   function pause() {
     isPlaying = false; playBtn.textContent = '▶';
-    if (ttsMode === 'voicevox') audioEl.pause();
-    else speechSynthesis.pause();
+    audioEl.pause();
+    if (ttsMode === 'webspeech') speechSynthesis.pause();
   }
 
   function stopAll() {
@@ -625,88 +625,81 @@
     updateMediaSession(para.text);
     saveProgress();
 
-    ttsMode === 'voicevox' ? await speakVoicevox(para.text) : speakWebSpeech(para.text);
+    ttsMode === 'googletts' ? await speakGoogleTTS(para.text) : speakWebSpeech(para.text);
   }
 
-  /* --- VOICEVOX --- */
-  // ベースURL（CORSプロキシ経由で試す）
-  const VV_TARGETS = [
-    id => text => `https://api.tts.quest/v3/voicevox/synthesis?text=${encodeURIComponent(text)}&speaker=${id}`,
-    id => text => `https://deprecatedapis.tts.quest/v2/voicevox/audio/?speaker=${id}&text=${encodeURIComponent(text)}`,
-  ];
-  // CORSプロキシを先に試し、直接アクセスは最後
-  const PROXIES = [
-    url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-    url => url,  // 直接（CORSが通る環境用）
-  ];
-
-  async function fetchVoicevox(text) {
-    for (const targetFn of VV_TARGETS) {
-      const rawUrl = targetFn(speakerId)(text);
-      for (const proxyFn of PROXIES) {
-        const url = proxyFn(rawUrl);
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 10000);
-        try {
-          const res = await fetch(url, { signal: controller.signal });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          const blob = await res.blob();
-          clearTimeout(timer);
-          if (blob.size < 200) throw new Error('empty response');
-          return blob;
-        } catch {
-          clearTimeout(timer);
-        }
+  /* ===================== GOOGLE CLOUD TTS ===================== */
+  async function fetchGoogleTTS(text) {
+    const res = await fetch(
+      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${GOOGLE_TTS_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: { text },
+          voice: { languageCode: 'ja-JP', name: googleVoiceName },
+          audioConfig: { audioEncoding: 'MP3', speakingRate: currentRate }
+        })
       }
+    );
+    if (!res.ok) {
+      const errBody = await res.text().catch(() => '');
+      throw new Error(`Google TTS HTTP ${res.status}: ${errBody}`);
     }
-    throw new Error('全VOICEVOXエンドポイント失敗');
+    const data = await res.json();
+    if (!data.audioContent) throw new Error('audioContentが空です');
+
+    // Base64 → Blob
+    const binary = atob(data.audioContent);
+    const bytes  = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new Blob([bytes], { type: 'audio/mpeg' });
   }
 
-  async function speakVoicevox(text) {
+  async function speakGoogleTTS(text) {
     try {
       let blob;
       if (prefetch && prefetch.index === currentIdx) {
         blob = prefetch.blob; prefetch = null;
       } else {
-        blob = await fetchVoicevox(text);
+        blob = await fetchGoogleTTS(text);
       }
       if (!isPlaying) return;
 
       if (blobUrl) URL.revokeObjectURL(blobUrl);
       blobUrl = URL.createObjectURL(blob);
       audioEl.src = blobUrl;
-      audioEl.playbackRate = currentRate;
+      audioEl.playbackRate = 1.0; // Google側でspeakingRateを指定済みのため1.0固定
       audioEl.onended = () => { if (isPlaying) { currentIdx++; speakCurrent(); } };
       audioEl.onerror = () => { if (isPlaying) { currentIdx++; speakCurrent(); } };
       await audioEl.play();
 
-      // 先読み
+      // 先読み（次の段落を並行取得）
       const ni = currentIdx + 1;
       if (ni < paragraphs.length) {
-        fetchVoicevox(paragraphs[ni].text)
+        fetchGoogleTTS(paragraphs[ni].text)
           .then(b => { prefetch = { index: ni, blob: b }; })
           .catch(() => {});
       }
     } catch (err) {
-      console.warn('VOICEVOX失敗:', err);
+      console.warn('Google TTS失敗:', err);
       ttsMode = 'webspeech';
       ttsBadge.className   = 'tts-badge fallback';
       ttsBadge.textContent = '🔈 ブラウザ内蔵音声（バックグラウンド再生不可）';
-      showToast('VOICEVOX接続失敗。ブラウザ音声に切り替えました');
+      showToast('Google TTS失敗。ブラウザ音声に切り替えました');
       switchToWebSpeechVoices();
       speakWebSpeech(paragraphs[currentIdx].text);
     }
   }
 
-  /* --- Web Speech API --- */
+  /* ===================== Web Speech API (fallback) ===================== */
   function speakWebSpeech(text) {
     speechSynthesis.cancel();
-    const utt  = new SpeechSynthesisUtterance(text);
-    utt.lang   = 'ja-JP';
-    utt.rate   = currentRate;
+    const utt   = new SpeechSynthesisUtterance(text);
+    utt.lang    = 'ja-JP';
+    utt.rate    = currentRate;
     if (wsVoices.length > 0) utt.voice = wsVoices[wsVoiceIdx] || wsVoices[0];
-    utt.onend  = () => { if (isPlaying) { currentIdx++; speakCurrent(); } };
+    utt.onend   = () => { if (isPlaying) { currentIdx++; speakCurrent(); } };
     utt.onerror = () => { if (isPlaying) { currentIdx++; speakCurrent(); } };
     speechSynthesis.speak(utt);
   }
