@@ -629,25 +629,35 @@
   }
 
   /* --- VOICEVOX --- */
-  // 複数エンドポイントを順番に試す
-  const VOICEVOX_URLS = [
-    (text, id) => `https://api.tts.quest/v3/voicevox/synthesis?text=${encodeURIComponent(text)}&speaker=${id}`,
-    (text, id) => `https://deprecatedapis.tts.quest/v2/voicevox/audio/?speaker=${id}&text=${encodeURIComponent(text)}`,
+  // ベースURL（CORSプロキシ経由で試す）
+  const VV_TARGETS = [
+    id => text => `https://api.tts.quest/v3/voicevox/synthesis?text=${encodeURIComponent(text)}&speaker=${id}`,
+    id => text => `https://deprecatedapis.tts.quest/v2/voicevox/audio/?speaker=${id}&text=${encodeURIComponent(text)}`,
+  ];
+  // CORSプロキシを先に試し、直接アクセスは最後
+  const PROXIES = [
+    url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    url => url,  // 直接（CORSが通る環境用）
   ];
 
   async function fetchVoicevox(text) {
-    for (const urlFn of VOICEVOX_URLS) {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 10000);
-      try {
-        const res = await fetch(urlFn(text, speakerId), { signal: controller.signal });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const blob = await res.blob();
-        clearTimeout(timer);
-        return blob;
-      } catch (e) {
-        clearTimeout(timer);
-        // 次のエンドポイントを試す
+    for (const targetFn of VV_TARGETS) {
+      const rawUrl = targetFn(speakerId)(text);
+      for (const proxyFn of PROXIES) {
+        const url = proxyFn(rawUrl);
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 10000);
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const blob = await res.blob();
+          clearTimeout(timer);
+          if (blob.size < 200) throw new Error('empty response');
+          return blob;
+        } catch {
+          clearTimeout(timer);
+        }
       }
     }
     throw new Error('全VOICEVOXエンドポイント失敗');
