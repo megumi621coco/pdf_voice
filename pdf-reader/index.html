@@ -686,7 +686,8 @@
       ttsMode = 'webspeech';
       ttsBadge.className   = 'tts-badge fallback';
       ttsBadge.textContent = '🔈 ブラウザ内蔵音声（バックグラウンド再生不可）';
-      showToast('Google TTS失敗。ブラウザ音声に切り替えました');
+      // エラー内容をアラートで表示（原因診断用）
+      alert('Google TTS エラー:\n' + err.message);
       switchToWebSpeechVoices();
       speakWebSpeech(paragraphs[currentIdx].text);
     }
