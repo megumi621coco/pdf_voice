@@ -225,7 +225,10 @@
           'https://corsproxy.io/?' + encodeURIComponent(targetUrl),
           {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${YAHOO_APP_ID}`
+            },
             body: JSON.stringify({
               id: '1', jsonrpc: '2.0',
               method: 'jlp.furiganaservice.furigana',
