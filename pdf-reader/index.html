@@ -226,7 +226,8 @@
   };
 
   function toKana(text) {
-    let t = text
+    // Unicode正規化でPDF由来の異なるコードポイントを統一
+    let t = text.normalize('NFC')
       .replace(/(\d+)月(\d+)日/g, (_, m, d) => `${m}がつ${d}にち`)
       .replace(/(\d+)年/g, (_, y)  => `${y}ねん`)
       .replace(/(\d+)月/g, (_, m)  => `${m}がつ`)
@@ -236,6 +237,8 @@
     for (const [k, v] of Object.entries(DICT)) {
       t = t.replaceAll(k, v);
     }
+    // デバッグ：変換後の先頭30文字を表示
+    kanaStatusEl.textContent = `変換後: ${t.substring(0, 30)}...`;
     return Promise.resolve(t);
   }
 
