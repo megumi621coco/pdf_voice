@@ -220,15 +220,16 @@
       const results = [];
       for (const chunk of chunks) {
         // appidをクエリパラメータとヘッダー両方で送る（CORS対応）
+        const targetUrl = `https://jlp.yahooapis.jp/FuriganaService/V2/furigana?appid=${YAHOO_APP_ID}`;
         const res = await fetch(
-          `https://jlp.yahooapis.jp/FuriganaService/V2/furigana?appid=${YAHOO_APP_ID}`,
+          'https://corsproxy.io/?' + encodeURIComponent(targetUrl),
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               id: '1', jsonrpc: '2.0',
               method: 'jlp.furiganaservice.furigana',
-              params: { q: chunk, grade: 8 }  // grade:8 = 全漢字にふりがな
+              params: { q: chunk, grade: 8 }
             })
           }
         );
