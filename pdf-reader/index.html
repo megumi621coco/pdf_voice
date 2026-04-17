@@ -240,8 +240,9 @@
           results.push(converted);
           kanaStatusEl.textContent = `漢字変換: 変換済 ✓（例: ${converted.substring(0, 20)}...）`;
         } else {
+          const detail = JSON.stringify(data).substring(0, 120);
           console.warn('Yahoo API unexpected response:', data);
-          kanaStatusEl.textContent = '漢字変換: レスポンス異常 → 元テキスト使用';
+          kanaStatusEl.textContent = `レスポンス異常: ${detail}`;
           results.push(chunk);
         }
       }
