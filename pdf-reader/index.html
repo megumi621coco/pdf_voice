@@ -216,32 +216,38 @@
   async function toKana(text) {
     if (!text.trim()) return text;
     try {
-      // APIの1リクエスト上限に合わせて500文字ずつ分割
       const chunks  = splitForYahoo(text, 500);
       const results = [];
       for (const chunk of chunks) {
-        const res = await fetch('https://jlp.yahooapis.jp/FuriganaService/V2/furigana', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${YAHOO_APP_ID}`
-          },
-          body: JSON.stringify({
-            id: '1', jsonrpc: '2.0',
-            method: 'jlp.furiganaservice.furigana',
-            params: { q: chunk, grade: 1 }
-          })
-        });
+        // appidをクエリパラメータとヘッダー両方で送る（CORS対応）
+        const res = await fetch(
+          `https://jlp.yahooapis.jp/FuriganaService/V2/furigana?appid=${YAHOO_APP_ID}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: '1', jsonrpc: '2.0',
+              method: 'jlp.furiganaservice.furigana',
+              params: { q: chunk, grade: 8 }  // grade:8 = 全漢字にふりがな
+            })
+          }
+        );
         const data = await res.json();
+        console.log('Yahoo API response:', JSON.stringify(data).substring(0, 200));
         if (data.result && data.result.word) {
-          results.push(data.result.word.map(w => w.furigana || w.surface).join(''));
+          const converted = data.result.word.map(w => w.furigana || w.surface).join('');
+          results.push(converted);
+          kanaStatusEl.textContent = `漢字変換: 変換済 ✓（例: ${converted.substring(0, 20)}...）`;
         } else {
+          console.warn('Yahoo API unexpected response:', data);
+          kanaStatusEl.textContent = '漢字変換: レスポンス異常 → 元テキスト使用';
           results.push(chunk);
         }
       }
       return results.join('');
     } catch (e) {
       console.warn('Yahoo!ルビ振りAPI失敗:', e);
+      kanaStatusEl.textContent = `漢字変換: エラー → 元テキスト使用（${e.message}）`;
       return text;
     }
   }
