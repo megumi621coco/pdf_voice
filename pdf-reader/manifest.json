@@ -1,0 +1,12 @@
+{
+  "name": "PDF音読アプリ",
+  "short_name": "PDF音読",
+  "description": "PDFを読み込んで耳で学習",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f0f23",
+  "theme_color": "#7c6fff",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
