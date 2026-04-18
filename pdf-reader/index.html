@@ -226,8 +226,8 @@
   };
 
   function toKana(text) {
-    // Unicode正規化でPDF由来の異なるコードポイントを統一
-    let t = text.normalize('NFC')
+    // NFKC正規化でCJK互換文字・全角文字を標準形に統一
+    let t = text.normalize('NFKC')
       .replace(/(\d+)月(\d+)日/g, (_, m, d) => `${m}がつ${d}にち`)
       .replace(/(\d+)年/g, (_, y)  => `${y}ねん`)
       .replace(/(\d+)月/g, (_, m)  => `${m}がつ`)
@@ -237,8 +237,14 @@
     for (const [k, v] of Object.entries(DICT)) {
       t = t.replaceAll(k, v);
     }
-    // デバッグ：変換後の先頭30文字を表示
-    kanaStatusEl.textContent = `変換後: ${t.substring(0, 30)}...`;
+    // デバッグ：「用」のコードポイントを表示
+    const youIdx = text.indexOf('用');
+    if (youIdx >= 0) {
+      const cp = text.codePointAt(youIdx).toString(16).toUpperCase();
+      kanaStatusEl.textContent = `「用」のコードポイント: U+${cp}（正常はU+7528）`;
+    } else {
+      kanaStatusEl.textContent = `変換後: ${t.substring(0, 30)}...`;
+    }
     return Promise.resolve(t);
   }
 
