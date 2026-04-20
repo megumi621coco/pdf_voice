@@ -66,8 +66,37 @@
       z-index: 10; flex-shrink: 0;
     }
     #top-bar.hidden { opacity: 0; transform: translateY(-100%); pointer-events: none; }
-    .top-filename { font-size: 13px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70%; }
+    .top-filename { font-size: 13px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55%; }
     .btn-icon { background: none; border: none; color: var(--text-dim); font-size: 20px; cursor: pointer; padding: 4px 8px; }
+    .top-btns { display: flex; align-items: center; gap: 0; }
+
+    /* 検索パネル */
+    #search-panel {
+      display: none; flex-direction: column;
+      background: var(--surface); border-bottom: 1px solid rgba(255,255,255,0.08);
+      z-index: 9; flex-shrink: 0;
+    }
+    #search-panel.open { display: flex; }
+    #search-input-row { display: flex; align-items: center; gap: 8px; padding: 10px 16px; }
+    #search-input {
+      flex: 1; background: #2a2a4a; border: 1px solid #444;
+      border-radius: 10px; color: var(--text); padding: 10px 14px; font-size: 16px; outline: none;
+    }
+    #search-input::placeholder { color: var(--text-dim); }
+    #search-close { background: none; border: none; color: var(--text-dim); font-size: 22px; cursor: pointer; padding: 4px; }
+    #search-results {
+      overflow-y: auto; max-height: 40vh;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .search-result-item {
+      padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04);
+      cursor: pointer; font-size: 14px; line-height: 1.6;
+    }
+    .search-result-item:active { background: rgba(124,111,255,0.1); }
+    .search-result-meta { font-size: 11px; color: var(--accent2); margin-bottom: 4px; }
+    .search-result-text { color: var(--text-dim); }
+    .search-highlight { color: var(--text-active); background: rgba(124,111,255,0.25); border-radius: 3px; padding: 0 2px; }
+    #search-empty { padding: 20px; text-align: center; color: var(--text-dim); font-size: 14px; }
 
     /* テキストエリア（Kindleの本文） */
     #text-area {
@@ -197,7 +226,19 @@
   <!-- トップバー -->
   <div id="top-bar">
     <span class="top-filename" id="filename"></span>
-    <button class="btn-icon" id="settings-btn">⚙</button>
+    <div class="top-btns">
+      <button class="btn-icon" id="search-btn">🔍</button>
+      <button class="btn-icon" id="settings-btn">⚙</button>
+    </div>
+  </div>
+
+  <!-- 検索パネル -->
+  <div id="search-panel">
+    <div id="search-input-row">
+      <input type="search" id="search-input" placeholder="キーワードを入力..." autocomplete="off">
+      <button id="search-close">✕</button>
+    </div>
+    <div id="search-results"></div>
   </div>
 
   <!-- テキスト表示 -->
@@ -511,6 +552,56 @@
   function closeDrawer() { drawer.classList.remove('open'); drawerOverlay.classList.remove('show'); }
 
   document.getElementById('settings-btn').addEventListener('click', openDrawer);
+
+  /* ===== SEARCH ===== */
+  const searchPanel  = document.getElementById('search-panel');
+  const searchInput  = document.getElementById('search-input');
+  const searchResults= document.getElementById('search-results');
+  const searchBtn    = document.getElementById('search-btn');
+  const searchClose  = document.getElementById('search-close');
+
+  searchBtn.addEventListener('click', () => {
+    showUI();
+    searchPanel.classList.toggle('open');
+    if (searchPanel.classList.contains('open')) {
+      searchInput.value = ''; searchResults.innerHTML = ''; searchInput.focus();
+    }
+  });
+  searchClose.addEventListener('click', () => {
+    searchPanel.classList.remove('open');
+    searchInput.value = ''; searchResults.innerHTML = '';
+  });
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim();
+    if (!q || !paragraphs.length) { searchResults.innerHTML = ''; return; }
+    const hits = [];
+    for (let i = 0; i < paragraphs.length; i++) {
+      if (paragraphs[i].text.includes(q)) hits.push(i);
+    }
+    if (!hits.length) {
+      searchResults.innerHTML = `<div id="search-empty">「${q}」は見つかりませんでした</div>`;
+      return;
+    }
+    searchResults.innerHTML = hits.slice(0, 50).map(i => {
+      const text = paragraphs[i].text;
+      const pos  = text.indexOf(q);
+      const pre  = text.slice(Math.max(0, pos - 20), pos);
+      const mat  = text.slice(pos, pos + q.length);
+      const post = text.slice(pos + q.length, pos + q.length + 40);
+      return `<div class="search-result-item" onclick="searchJump(${i})">
+        <div class="search-result-meta">📄 ${paragraphs[i].pageNum}ページ・段落${i + 1}</div>
+        <div class="search-result-text">…${pre}<span class="search-highlight">${mat}</span>${post}…</div>
+      </div>`;
+    }).join('') + (hits.length > 50 ? `<div id="search-empty">他 ${hits.length - 50} 件</div>` : '');
+  });
+
+  function searchJump(idx) {
+    searchPanel.classList.remove('open');
+    searchInput.value = ''; searchResults.innerHTML = '';
+    jumpTo(idx);
+    if (!isPlaying) play();
+  }
 
   /* ===== SPEED ===== */
   function cycleSpeed() {
