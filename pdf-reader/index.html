@@ -385,11 +385,12 @@
       paragraphs = [];
       for (let p = 1; p <= totalPages; p++) {
         loadingText.textContent = `テキストを抽出中... ${p} / ${totalPages}`;
-        const page    = await pdf.getPage(p);
-        const content = await page.getTextContent();
-        paragraphs.push(...chunk(buildText(content), p));
+        const page     = await pdf.getPage(p);
+        const viewport = page.getViewport({ scale: 1 });
+        const content  = await page.getTextContent();
+        paragraphs.push(...chunk(buildText(content, viewport.height), p));
       }
-      paragraphs = paragraphs.filter(p => p.text.trim().length > 3);
+      paragraphs = paragraphs.filter(p => p.text.trim().length > 3 && !isHeaderFooter(p.text));
       if (!paragraphs.length) { hideLoading(); showToast('テキストを抽出できませんでした'); return; }
 
       currentIdx = 0;
@@ -413,8 +414,23 @@
     }
   }
 
-  function buildText(content) {
-    const items = content.items.filter(it => it.str.trim());
+  function isHeaderFooter(text) {
+    const s = text.replace(/\s+/g, '');
+    if (!s.length) return true;
+    const asciiCount = (s.match(/[a-zA-Z]/g) || []).length;
+    return asciiCount / s.length > 0.7 && s.length < 60;
+  }
+
+  function buildText(content, pageHeight) {
+    const margin = (pageHeight || 0) * 0.07;
+    const items = content.items.filter(it => {
+      if (!it.str.trim()) return false;
+      if (pageHeight) {
+        const y = it.transform[5];
+        if (y < margin || y > pageHeight - margin) return false;
+      }
+      return true;
+    });
     if (!items.length) return '';
     const sorted = [...items].sort((a, b) => {
       const dy = b.transform[5] - a.transform[5];
