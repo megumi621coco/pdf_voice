@@ -82,13 +82,14 @@
     .para-item.active { color: var(--text-active); }
     .para-item.done   { color: #44445a; }
 
-    /* 左右タップゾーン */
-    #tap-left, #tap-right {
-      position: absolute; top: 0; bottom: 0; width: 22%;
-      z-index: 5; cursor: pointer;
+    /* 前後ボタン */
+    .btn-skip {
+      width: 48px; height: 48px; border-radius: 50%; border: none;
+      background: rgba(124,111,255,0.15); color: var(--accent2);
+      font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
     }
-    #tap-left  { left: 0; }
-    #tap-right { right: 0; }
+    .btn-skip:active { background: rgba(124,111,255,0.35); }
 
     /* ボトムバー（常時表示） */
     #bottom-bar {
@@ -101,8 +102,8 @@
       border-radius: 2px; margin-bottom: 10px; cursor: pointer;
     }
     #progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; width: 0%; }
-    #bottom-main { display: flex; align-items: center; justify-content: space-between; }
-    #page-label { font-size: 13px; color: var(--text-dim); min-width: 80px; }
+    #bottom-main { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+    #page-label { font-size: 13px; color: var(--text-dim); min-width: 54px; text-align: center; }
     #play-btn {
       width: 56px; height: 56px; border-radius: 50%; border: none;
       background: var(--accent); color: #fff; font-size: 22px; cursor: pointer;
@@ -199,10 +200,8 @@
     <button class="btn-icon" id="settings-btn">⚙</button>
   </div>
 
-  <!-- テキスト表示（左右タップゾーン付き） -->
-  <div style="position:relative; flex:1; overflow:hidden; display:flex; flex-direction:column;">
-    <div id="tap-left"  onclick="tapLeft()"></div>
-    <div id="tap-right" onclick="tapRight()"></div>
+  <!-- テキスト表示 -->
+  <div style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
     <div id="text-area" onclick="handleCenterTap(event)"></div>
   </div>
 
@@ -213,8 +212,10 @@
       <div id="progress-fill"></div>
     </div>
     <div id="bottom-main">
-      <span id="page-label">- / -</span>
+      <button class="btn-skip" id="prev-btn">⏮</button>
       <button id="play-btn">▶</button>
+      <button class="btn-skip" id="next-btn">⏭</button>
+      <span id="page-label">- / -</span>
       <button id="speed-btn" onclick="cycleSpeed()">1.0x</button>
     </div>
   </div>
@@ -476,8 +477,7 @@
     const el = e.target.closest('.para-item');
     if (el) { jumpTo(parseInt(el.dataset.idx)); return; }
     if (drawer.classList.contains('open')) { closeDrawer(); return; }
-    if (uiVisible) { openDrawer(); }
-    else { showUI(); }
+    uiVisible ? hideUI() : showUI();
   }
 
   function tapLeft() {
@@ -530,6 +530,8 @@
 
   /* ===== CONTROLS ===== */
   playBtn.addEventListener('click', () => { isPlaying ? pause() : play(); showUI(); });
+  document.getElementById('prev-btn').addEventListener('click', () => tapLeft());
+  document.getElementById('next-btn').addEventListener('click', () => tapRight());
 
   function jumpTo(idx) {
     stopAll(); currentIdx = idx;
